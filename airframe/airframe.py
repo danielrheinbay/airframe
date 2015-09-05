@@ -156,6 +156,15 @@ class AirFrame(object):
             if im.size[0] > size[0] or im.size[1] > size[1]:
                 im.thumbnail(size, Image.ANTIALIAS)
                 im.save(infile)
+            elif im.size[0] < size[0] and im.size[1] < size[1]:
+                width_factor = float(size[0])/im.size[0]
+                height_factor = float(size[1])/im.size[1]
+                target_factor = min(height_factor, width_factor)
+                target_width = int(im.size[0]*target_factor)
+                target_height = int(im.size[1]*target_factor)
+                result = im.resize((target_width, target_height), Image.BICUBIC)
+                result.save(infile)
+                result.close()
             im.close()
 
 
